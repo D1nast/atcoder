@@ -1,45 +1,14 @@
-# class BinaryTree
-#   attr_accessor :data, :left, :right
-#   def initialize(data, left = nil, right = nil)
-#       @data  = data
-#       @left  = left
-#       @right  = right
-#   end
-# end
-
-# def toBinaryTree(root)
-#   rootTree  = BinaryTree.new(root[0])
-#   i = 1
-#   root.each do |item|
-#       node = BinaryTree.new(item)
-#       if i % 2 != 0
-#           temp = node
-#           rootTree.left = node
-#           rootTree = temp
-#       else
-#           temp = node
-#           rootTree.right = node
-#           rootTree = temp
-#       end
-#   end
-# end
-
-# def bstSearch(root,key)
-#   # 関数を完成させてください
-
-# end
-
 class Node
   attr_accessor :value, :left, :right
+  
   def initialize(value)
-    @data = data
+    @value = value  # ここを @data から @value に変更
     @left = nil
     @right = nil
   end
 end
 
 class BinaryTree
-
   def initialize
     @root = nil
   end
@@ -49,7 +18,9 @@ class BinaryTree
   end
 
   def insert_recursively(node, value)
-    return Node.new(value) if node.nil?
+    if node.nil?
+      return Node.new(value)  # 新しいノードを返す
+    end
 
     if value < node.value
       node.left = insert_recursively(node.left, value)
@@ -77,20 +48,24 @@ class BinaryTree
   end
 end
 
+# 追加の関数: 配列から二分探索木を作成
+def toBinaryTree(arr)
+  tree = BinaryTree.new
+  arr.each { |value| tree.insert(value) unless value.nil? }
+  tree
+end
+
+# bstSearch 関数の実装
+def bstSearch(root, key)
+  root.bst_search(root.root, key)  # root から検索
+end
+
 # 二分探索木を作成
 bst = BinaryTree.new
-bst.insert(0)
-bst.insert(-10)
+ins0 = bst.insert(10)
+puts ins0
 bst.insert(5)
-bst.insert(-3)
-bst.insert(9)
+bst.insert(3)
+bst.insert(6)
 
-# 探索
-result_node = bst.search(5)
-
-# 結果を表示
-if result_node
-  puts "[#{result_node.value}, #{result_node.left ? result_node.left.value : 'null'}, #{result_node.right ? result_node.right.value : 'null'}]"
-else
-  puts "null"
-end
+puts ins0.left
