@@ -38,7 +38,9 @@ Q = gets.to_i
 Q.times do
   t, d = gets.split.map(&:to_i)
   t -= 1
+  # q,rが7,3なら d.divmod(7) bに商を、cに余りを格納する
   b, c = d.divmod(q[t])
+  # cがr[t](仮に3とする)以下なら
   a = c <= r[t] ? b : b + 1
   ans = a * q[t] + r[t]
   puts ans
