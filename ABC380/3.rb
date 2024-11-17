@@ -1,41 +1,22 @@
 n,k = gets.split.map(&:to_i)
-s = gets.split("").map(&:to_i)
+s = gets.chomp
 
-count1 = 0
-list = []
-kIndex = 0
-check = k-1
-ans =[]
-s.each_with_index do |num,index|
-  if num == 1
-    count1 += 1
-  end
-  if num == 0 && count1 > 0
-    kIndex+=1
-    list << count1
-    count1 = 0
-  end
+# # split
+idx = [0] + (1...n).select { |i| s[i-1] != s[i] } + [n]
+splited_s = idx.each_cons(2).map { |a, b| s[a...b] }
+puts splited_s.inspect
 
-  if kIndex == k-1 && check > 0
-    
-  end
+# # swap
+if s[0] == '0'
+  kth_1_idx = 2 * k - 1
+else
+  kth_1_idx = 2 * k - 2
 end
 
-kIndex = 0
-count1 = 0
-decrease = list[k-1]
+# # swap the k-th 1-indexed blocks
+splited_s[kth_1_idx - 1], splited_s[kth_1_idx] = splited_s[kth_1_idx], splited_s[kth_1_idx - 1]
 
-s.each_with_index do |num,index|
-  count1 += 1 if num == 1
-  if num == 0 && count1 > 0
-    kIndex += 1
-    count1 = 0
-  end
-  if kIndex == k-1 && list[k-1] > 0
-    s[index] = 1
-    list[k-1] -= 1
-  end
+# # join
+t = splited_s.join
 
-end
-
-puts s.inspect
+puts t
