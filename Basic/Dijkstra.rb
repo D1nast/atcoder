@@ -1,51 +1,42 @@
 require 'pqueue'
 
-def dijkstra(graph,start)
-  
-  distance = {} # 辺の重みを格納するハッシュマップ
-  # 各ノードに∞を入れる
-  graph.each do |key,hash|
-    # 全てのキーをInfinityに
-    distance[key] = Float::INFINITY
-    # KeyにはないノードをInfinityに
-    hash.each { |value| distance[value[0]] = Float::INFINITY }
+def dijkstra(graph, start)
+
+  # 初期化
+  #dist=最短距離格納,graph.eachで全てのノードをInfinity,探索開始ノードは距離を0
+  dist = {} 
+  graph.each do |node,hash|
+    dist[node] = Float::INFINITY
+    hash.each {|node| dist[node[0]] = Float::INFINITY}
   end
+  dist[start] = 0
 
-  distance[start] = 0 # スタートするノードは重み０  
+  # 優先度付きキューの作成
+  pq = PQueue.new
+  pq.push([start, 0])  # (頂点, 距離) をキューに入れる
 
-  puts "初期値 distance:#{distance.inspect}"
-  puts "グラフ #{graph.inspect}"
-
-  pq = PQueue.new #優先度付きキューの作成 距離が最小のノードを常に引っ張ってくることができる
-  pq.push([0,start]) #引数には[距離,探索開始ノード]
-
-  visited = {}
-
+  # キューが空になるまで処理
   while !pq.empty?
-    current_distance , current_node = pq.pop
-    puts "探索ノード #{current_node} 距離 #{current_distance}"
-    next if visited[current_node]
-    visited[current_node] = true
+    node, d = pq.pop  # 最小距離の頂点を取り出す
+    
+    # 現在の距離が既に登録された最短距離より大きい場合はスキップ
+    next if d > dist[node]
 
-    graph[current_node].each do |neighbor,weight| # 0 => { 1=>1 , 2=>4 } の { } をeachで順に取り出す
-       # 0から隣接ノードに移動する際は絶対にif文はTRUEになる。なぜなら隣接ノードのdistanceはInfinityだから
-       # そうでない場合は、現在探索済の最短距離よりもdistance[current_node] + weightが小さい場合に書き換えられる
-      # puts "隣接ノード #{neighbor} 重み #{weight}"
-      # puts "現在のノードの距離#{distance[current_node]} 隣接ノードの距離#{distance[neighbor]}"
-      # puts "distance[current_node] + weight #{distance[current_node] + weight} distance[neighbor] #{distance[neighbor] }}"
-      if distance[current_node] + weight < distance[neighbor] 
-        distance[neighbor] = distance[current_node] + weight
-        pq.push([distance[neighbor],neighbor])
+    # 隣接する頂点を調べる
+    graph[node].each do |nextNode, cost|
+      new_dist = dist[node] + cost  # 新しい距離
+      if new_dist < dist[nextNode]  # 距離が短縮される場合のみ更新
+        dist[nextNode] = new_dist  # 最短距離を更新
+        pq.push([nextNode,new_dist])  # (頂点, 新しい距離) をキューに追加
       end
     end
   end
 
-  distance
+  return dist
 
 end
 
-# {0=>{1=>1, 2=>4}, 1=>{2=>2, 3=>5}, 2=>{3=>1}}
-# 上記のようなデータ構造を取る。[node][root]で 0 => {1=>1,2=>4} にアクセスできる
+
 initial = gets.split.map(&:to_i)
 graph = Hash.new { |hash,key| hash[key] = {} }
 initial[1].times do
@@ -54,10 +45,11 @@ initial[1].times do
 end
 
 
-result = dijkstra(graph,0)
+result = dijkstra(graph, initial[2])
 
-puts result.inspect
+result.each {|key,value| puts value == Float::INFINITY ?  "INF" :  value } 
 
 
 # https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=GRL_1_A&lang=ja
 # ダイクストラ法の典型問題
+# AIZUが pqueueに対応していないのか、Runtime Errorになる　ただし、テストケースは通る

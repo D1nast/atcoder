@@ -1,45 +1,43 @@
-def dfs(graph,v,visited,timestamp,time)
+require 'pqueue'
 
-  time[:current] += 1
-  timestamp[v][:start] = time[:current]
-  visited[v] = true
+def dijkstra(graph, start)
 
-  graph[v].each do |neighbor|
-    dfs(graph,neighbor,visited,timestamp,time) unless visited[neighbor]  
-  end
+  # dist = {} 
+  # graph.each do |node,hash|
+  #   dist[node] = Float::INFINITY
+  #   hash.each {|node| dist[node[0]] = Float::INFINITY}
+  # end
+  # dist[start] = 0
 
-  time[:current] += 1
-  timestamp[v][:end] = time[:current]
+  # pq = PQueue.new
+  # pq.push([start, 0]) 
+
+
+  # while !pq.empty?
+  #   node, d = pq.pop 
+
+  #   next if d > dist[node]
+
+  #   graph[node].each do |nextNode, cost|
+  #     new_dist = dist[node] + cost  
+  #     if new_dist < dist[nextNode]  
+  #       dist[nextNode] = new_dist  
+  #       pq.push([nextNode,new_dist]) 
+  #     end
+  #   end
+  # end
+
+  return dist
 
 end
 
 
-n = gets.to_i
-
-graph = Hash.new{0}
-visited = {}
-timestamp = Hash.new { |hash,key| hash[key] = {start:nil,end:nil } }  
-time = { current:0 }
-
-n.times do
-  v = gets.split.map(&:to_i)
-  list = []
-  (2...(v.size)).each do |i|
-    if i >= 2
-      list << v[i]
-    end
-  end
-    graph[v[0]] = list
+initial = gets.split.map(&:to_i)
+graph = Hash.new { |hash,key| hash[key] = {} }
+initial[1].times do
+  node,root,weight = gets.split.map(&:to_i)
+  graph[node][root] = weight
 end
 
-# puts graph.inspect
-dfs(graph,1,visited,timestamp,time)
 
-puts "output"
-puts timestamp.inspect
-timestamp.sort.each do |key,time|
-  puts "#{key} #{time[:start]} #{time[:end]}"
-end
-
-# https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=ALDS1_11_B&lang=ja
-# ↑問題
+result = dijkstra(graph, initial[2])
