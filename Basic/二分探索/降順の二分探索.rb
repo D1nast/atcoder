@@ -20,10 +20,6 @@ a.each_with_index do |ai,index|
   end
 end
 
-
-# puts list.inspect
-# puts indList.inspect
-
 # 降順の二分探索
 b.each do |sushi|
 
@@ -50,3 +46,4 @@ b.each do |sushi|
 
 end
 
+# https://atcoder.jp/contests/abc382/tasks/abc382_c
