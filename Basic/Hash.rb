@@ -17,3 +17,7 @@ end
 
 puts ans.join(" ")
 
+# ハッシュマップ
+# https://atcoder.jp/contests/abc337/tasks/abc337_c
+# 
+# hash[キー] = value　で{key=>value}になる
