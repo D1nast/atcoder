@@ -1,27 +1,22 @@
 n = gets.to_i
 a = gets.split.map(&:to_i)
-list = Array.new(a.max + 1){[]}
+list = Array.new(a.max + 1){0}
 ans = []
+tmp = 0
 
-list[1] =  a.sort { |a,b| b <=> a }
-(0...list[1].size).reverse_each do |i|
-  break if list[1][i] > 1
-  list[1].pop
+a.each { |i| list[i] += 1  }
+
+(1...list.size).reverse_each do |i|
+  tmp = list[i+1] if i != list.size - 1
+  list[i] = list[i] * i + tmp
 end
 
-# puts list[1].inspect
-# puts list.inspect
-
-(2...a.max).each do |i|
-  # puts "i = #{i}"
-  list[i] = list[i-1].dup
-  # puts "list[i]= #{list[i]}"
-  list[i].reverse_each do |j|
-    break if j > i
-    list[i].pop
+a.each do |i|
+  if list[i+1].nil?
+    ans << 0
+  else
+    ans << list[i+1]
   end
 end
-
-a.each {|i| ans << list[i].sum }
 
 puts ans.join(" ")
