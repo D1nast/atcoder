@@ -21,17 +21,17 @@ rightdiag = n
   horizontal[ai%n-1] += 1
   # 対角線軸の判定
   leftdiag  -= 1 if (ai - 1) % (n + 1) == 0 || ai == 1 
-  rightdiag -= 1 if (ai - n) % (n - 1) == 0 || ai == n
+  rightdiag -= 1 if ai != n**2 && (ai - n) % (n - 1) == 0 || ai == n
 
-  puts "left:#{leftdiag} right:#{rightdiag}"
+  # puts "left:#{leftdiag} right:#{rightdiag}"
   # ビンゴの判定
   if horizontal[ai%n-1] == n || vertical[ai/n] == n || vertical[ai/n-1] == n || leftdiag == 0 || rightdiag == 0 
     puts i+1
     exit
   end
 
-  puts "vertical:#{vertical.inspect}"
-  puts "horizontal:#{horizontal.inspect}"
+  # puts "vertical:#{vertical.inspect}"
+  # puts "horizontal:#{horizontal.inspect}"
   
 end
 
