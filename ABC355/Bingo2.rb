@@ -37,4 +37,41 @@ end
 
 puts -1
 
-# puts "#{vertical} #{horizontal}"
+
+
+# 以下全てACのコード
+# n, t = gets.split.map(&:to_i)  # 盤面のサイズ n とターン数 t
+# a = gets.split.map(&:to_i)     # 宣言されたターンの番号を取得
+
+# # 縦、横、対角線のカウンタ
+# vertical = Array.new(n, 0)     # 縦軸のカウント
+# horizontal = Array.new(n, 0)   # 横軸のカウント
+# leftdiag = 0                   # 左上から右下の対角線
+# rightdiag = 0                  # 右上から左下の対角線
+
+# # 各ターンごとに処理
+# (0...t).each do |i|
+#   ai = a[i] - 1  # 1からのインデックスを0ベースに変換
+  
+#   row = ai / n  # 行のインデックス
+#   col = ai % n  # 列のインデックス
+  
+#   # 縦軸のカウント
+#   vertical[col] += 1
+#   # 横軸のカウント
+#   horizontal[row] += 1
+#   # 左上から右下の対角線のカウント
+#   leftdiag += 1 if row == col
+#   # 右上から左下の対角線のカウント
+#   rightdiag += 1 if row + col == n - 1
+
+#   # ビンゴの判定
+#   if vertical[col] == n || horizontal[row] == n || leftdiag == n || rightdiag == n
+#     puts i + 1
+#     exit
+#   end
+# end
+
+# puts -1  # すべてのターンを終わってもビンゴが達成されなかった場合
+
+
