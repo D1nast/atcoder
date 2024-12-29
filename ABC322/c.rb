@@ -1,35 +1,23 @@
+# 配列の後ろから数えて、花火が打ち上がらないならカウントを増やす
 n,m = gets.split.map(&:to_i)
-s = gets.chomp.split("").map(&:to_i)
+a = gets.split.map(&:to_i)
 
-countN = 0
-count2 = 0
+count = 0
+arr = Array.new(n+1){0}
+a.each { |i| arr[i] += 1}  
 
-maxN = 0
-max2 = 0
-
-s.each do |number|
-
-  if number == 0
-    maxN = [countN,maxN].max
-    max2 = [count2,max2].max
-    countN = 0
-    count2 = 0
-    next
-  end
-
-  countN += 1 if number == 1 || number == 2
-  count2 += 1 if number == 2
+(1..n).reverse_each do |i|
+  if arr[i] == 0
+    count += 1
+    arr[i] = count
+  else
+    arr[i] = 0 
+    count = 0
+  end  
 end
 
-maxN = [countN,maxN].max
-max2 = [count2,max2].max
-
-if maxN - m < max2
-  puts maxN - m + max2 - (maxN - m)
-else
-  puts maxN - m
+arr.each_with_index do |i,index|
+  next if index == 0
+  puts i 
 end
 
-
-# puts maxN
-# puts max2
