@@ -1,25 +1,30 @@
 n = gets.to_i
-h = [0] + gets.split.map(&:to_i)
-max = 1
+h = gets.split.map(&:to_i)
 
-# スキップする数
-(1..n-2).each do |i|
-  # スタート位置
-  (1..i).each do |start|
-    height = 0
-    count = 1
-    (start..n).step(i).each do |j|
-      if height != h[j]
-        count = 1
+ans = 0
+# w を 1 から n まで試す
+(1..n).each do |w|
+  # si を 0 から w-1 まで試す
+  (0...w).each do |si|
+    a = []
+    # si から n まで、w ごとに要素を選ぶ
+    (si...n).step(w) do |i|
+      a << h[i]
+    end
+
+    val = -1
+    len = 0
+    # 最大連続値を求める
+    a.each do |x|
+      if val == x
+        len += 1
       else
-        count += 1
+        val = x
+        len = 1
       end
-      height = h[j]
-      max = [max,count].max
+      ans = [ans, len].max
     end
   end
 end
 
-puts max.inspect
-# マックス飛ばせる距離は、1+n-2で計算可能
-# ChatGPTでC++に変換するとAC。rubyのままだとTLE
+puts ans

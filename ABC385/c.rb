@@ -8,7 +8,8 @@ max = 1
   (1..i).each do |start|
     height = 0
     count = 1
-    (start..n).step(i).each do |j|
+    (start..n).step(i) do |j|
+      puts j
       if height != h[j]
         count = 1
       else
