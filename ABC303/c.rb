@@ -3,11 +3,12 @@ n,m,h,k = gets.split.map(&:to_i)
 s = gets.chomp
 item = Hash.new{ |hash,key| item[key] = 0 }
 init = [0,0]
+# アイテムの座標を設定
 m.times do
   x,y = gets.split.map(&:to_i)
   item[[x,y]] += 1
 end
-
+# n回移動する
 (0...n).each do |i|
   h -= 1
   case s[i]
@@ -20,19 +21,16 @@ end
   when "D" then
     init[1] -= 1
   end
-  # puts "init:#{init.inspect} item.has:#{item.has_key?(init)} item[init]:#{item[init]}}"
-  # puts item.has_key?(init)
+  # 移動後体力が０なら即終了
   if h < 0
     puts "No"
     exit
   end 
-
+  # h<kかつその座標にアイテムがあれば使用
   if h < k && item[init] > 0
-    break if item[init] == 0
     item[init] -= 1
     h = k
   end
-
 end
 
 puts "Yes"
