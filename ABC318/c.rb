@@ -1,14 +1,20 @@
 n,d,p = gets.split.map(&:to_i)
-f =  gets.split.map(&:to_i)
-min = [f.sum,(n.to_f/d).ceil*p].min
+f =  gets.split.map {|num| num.to_i * -1 }
+f.sort!
+sum = f.sum
+min = [sum,-(n/d+1)*p].max
 
-(1..n/d).each do |i|
-  except = i * d
-  r = n - except
-  f.combination(r) {|c| min = [i*p+c.sum,min].min }
+(0...n/d*d).each do |i|
+  sum = sum - f[i] 
+  if (i+1) % d == 0
+    ticketP = (i+1)/d * p
+    min = [min,sum-ticketP].max
+  end
 end
 
-puts min
+puts min.abs
+
+
 
 
 # nまで周遊パスを購入した場合と、購入しなかった場合とで全探索
