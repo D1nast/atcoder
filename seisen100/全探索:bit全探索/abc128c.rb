@@ -20,10 +20,11 @@ ans = 0
   end
   switch << list
 end
-
+# スイッチ毎に全ての電球が点灯するかループ
 switch.each do |item|
   ok = 0
   # puts "switch:#{item}"
+  # 各電球のスイッチループ
   (0...m).each do |i|
     on = 0
     lb[i].each_with_index do |bulb,index|
