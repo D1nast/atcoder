@@ -1,50 +1,47 @@
-def dfs(graph, v, visited, timestamp, time)
-  # ノードvを訪問
-  time[:current] += 1
-  timestamp[v][:start] = time[:current]
-  visited[v] = true
+# 深さ優先探索を使う場合は、配列やタイムスタンプ等、都度変更したい部分がある時
+# 配列(タイムスタンプ)：Array.new(n){}として参照渡しを防ぐ方がベター
+# time:ハッシュを使う方が無難。time = 0だと、不変のデータ型なので、おかしくなる
+# 例) time+=1はtimeの値に+1されているのではなく、time+1した変数が新しく作成されている
+# つまり配列もtimeも、想定していない部分が変更されてしまったりする
 
-  # 隣接ノードを訪問
-  graph[v].sort.each do |neighbor|  # 隣接ノードをソートして訪問順を調整
-    dfs(graph, neighbor, visited, timestamp, time) unless visited[neighbor]
+def dfs(graph,visited,timestamp,start,time,n)
+  time[:current] += 1
+  visited[start-1] = true
+  timestamp[start-1][0] = time[:current]
+
+  graph[start-1].each do |nextNode|
+    if nextNode > 0 && nextNode <= n && !visited[nextNode-1]
+      dfs(graph,visited,timestamp,nextNode,time,n)
+    end
   end
 
-  # ノードvの訪問が終了
   time[:current] += 1
-  timestamp[v][:end] = time[:current]
-
+  timestamp[start-1][1] = time[:current]
 end
 
 n = gets.to_i
-
-graph = Hash.new { [] }  # 空の配列をデフォルトとして使用
-visited = {}  # 各ノードの訪問状態
-timestamp = Hash.new { |hash, key| hash[key] = {start: nil, end: nil} }
-time = { current: 0 }
-
-# グラフの読み込み
+input = []
+time = { current:0 }
 n.times do
-  v = gets.split.map(&:to_i)
-  node = v[0]
-  neighbors = v[2..-1]  # 2番目の要素以降が隣接ノード
-  graph[node] = neighbors
+  input << gets.split.map(&:to_i)
+end 
+graph = Array.new(n,[])
+visited = Array.new(n){false}
+timestamp = Array.new(n){[nil,nil]}
+(1..n).each { |i|timestamp[i] } 
+input.each do |item|
+  if item[1] == 0
+    graph[item[0]-1] = [item[1]]
+  else
+    graph[item[0]-1] = item[2..-1]
+  end
 end
 
-puts graph.inspect
-# すべてのノードに対して訪問済み状態を初期化
-(1..n).each { |i| visited[i] = false }
-
-# すべてのノードについてDFSを開始
-(1..n).each do |i|
-  dfs(graph, i, visited, timestamp, time) unless visited[i]
+(0...n).each do |i|
+  dfs(graph,visited,timestamp,i+1,time,n) if !visited[i]
 end
 
-# 出力
-timestamp.sort.each do |key, time|
-  puts "#{key} #{time[:start]} #{time[:end]}"
-end
-
-# https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=ALDS1_11_B&lang=ja
-# ↑問題
-# 深さ優先探索の典型問題。行けるところまで行って戻ってくる
-# 
+# 答えの出力
+timestamp.each_with_index do |ans,index|
+  puts "#{index+1} #{ans[0]} #{ans[1]}"
+end 
