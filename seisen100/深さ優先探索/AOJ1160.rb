@@ -26,11 +26,9 @@ while !(w == 0 && h == 0)
   h.times do
     map << gets.split.map(&:to_i)
   end
-  # puts "map:#{map.inspect}"
   (0...h).each do |i|
     (0...w).each do |j|
       row,col = i,j
-      # puts "map[row][col]#{map[row][col]}"
       if !visited[row][col] && map[row][col] == 1
         dfs(map,visited,row,col,w,h)
         island[:count] += 1
@@ -38,7 +36,8 @@ while !(w == 0 && h == 0)
     end
   end
   ans << island[:count]
-  # 最終行 入力が 0,0ならループ終了
+
+  # 入力が 0,0ならループ終了
   w,h = gets.split.map(&:to_i)
 end
 
@@ -48,3 +47,4 @@ end
 
 # ChatGPTにC++に変換してもらうとACする
 # 恐らくRubyだと遅くて実行制限時間超過する(1sec)
+# https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=1160&lang=ja
