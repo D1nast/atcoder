@@ -13,7 +13,7 @@ knapsack.each_with_index do |item,index|
       dp[index+1][i] = dp[index][i]
     else
       # アイテムを入れられる重さなら、前の結果と今入れた場合の結果で価値が高くなるのを入れる、
-      dp[index+1][i] = [ dp[index][i],dp[index][i-item[1]]+item[0] ].max
+      dp[index+1][i] = [ dp[index][i] , dp[index][i-item[1]] + item[0] ].max
     end
   end
 end
