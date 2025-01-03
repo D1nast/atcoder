@@ -16,11 +16,16 @@ dp = Array.new(n+1){ Array.new(n+1,0) }
     end
   end
 end
-
 puts dp[1][n]
-# puts matrix.inspect
-# puts dp.inspect
+puts matrix.inspect
+puts dp.inspect
 # 左の列数 = 右の行数　の時のみ行列の掛け算可
 # 計算量：X(左の行数) * Y(左の列数) * Z(右の列数)
 # 連鎖行列の計算：必ず一番左の行列の行数がX、右の列数がZ
-# 行列の積：左の行数 * 右の列数
+# 行列の積（新たな行列）：左の行数 * 右の列数
+
+
+BCの積(2,1)
+BCの計算量(2,3,1)
+ABCの積(3,1)
+ABCの計算量(3,2,1)
