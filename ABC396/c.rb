@@ -17,5 +17,5 @@ sum = 0
 end
 
 puts sum
-puts b.inspect
-puts w.inspect
+# puts b.inspect
+# puts w.inspect
