@@ -1,7 +1,5 @@
 s = gets.chomp.chars
-left = [ "(" , "[" , "<" ]
 stack = []
-
 s.each do |str|
 
   if str == "(" || str == "[" || str == "<"
