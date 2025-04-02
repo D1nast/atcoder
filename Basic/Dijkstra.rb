@@ -44,6 +44,7 @@ initial[1].times do
   graph[node][root] = weight
 end
 
+puts "graphのインスペクト#{graph.inspect}"
 
 result = dijkstra(graph, initial[2])
 
