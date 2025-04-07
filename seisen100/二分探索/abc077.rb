@@ -35,7 +35,6 @@ end
 
 (1...N).each {|i| parts[i] += parts[i-1]}
 
-
 c.each_with_index do |ci,index|
   # 配列の左端 < ci　担保
   next if b[0] >= ci

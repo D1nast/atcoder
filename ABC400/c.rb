@@ -1,1 +1,1 @@
-puts Math.log(1000000000)
+N = gets.to_i
