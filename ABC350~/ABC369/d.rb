@@ -1,13 +1,15 @@
 n = gets.to_i
-a = gets.split.map(&:to_i)
+a = [0] + gets.split.map(&:to_i)
 
-dp0 = 0 # 偶数
-dp1 = -Float::INFINITY # 奇数
+dpEven = Array.new(n+1){0}
+dpOdd = Array.new(n+1){0}
+dpEven[0] = 0
+dpOdd[0] = -Float::INFINITY
 
-a.each do |x|
-  tmp = dp0
-  dp0 = [dp0, dp1 + 2 * x].max
-  dp1 = [dp1, tmp + x].max
+(1..n).each do |i|
+  dpEven[i] = [ dpEven[i-1],dpOdd[i-1]+a[i]*2 ].max
+  dpOdd[i] = [ dpOdd[i-1],dpEven[i-1]+a[i] ].max
 end
 
-puts [dp0, dp1].max
+puts [dpEven[-1],dpOdd[-1] ].max
+
