@@ -8,13 +8,12 @@ for i in range(n):
 
 for i in range(q):
     c,x,v = input().split()
-    x,v = int(x),int(v)
+    x,v = int(x)-1,int(v)
+    pre = min(a[x],b[x])
     if c == "A":
-        ans -= min(a[x-1],b[x-1])
-        a[x-1] = v
-        ans += min(a[x-1],b[x-1])
+        a[x] = v
     else:
-        ans -= min(a[x-1],b[x-1])
-        b[x-1] = v
-        ans += min(a[x-1],b[x-1])
+        b[x] = v
+    now = min(a[x],b[x])
+    ans += now - pre
     print(ans)
