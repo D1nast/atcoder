@@ -1,0 +1,3 @@
+PythonでDFSする時は再帰の上限数を上げる。デフォルトでは再帰上限1000で、atcoderは制約が10^5以上である事が多いから
+    import sys
+    sys.setrecursionlimit(10**7)
