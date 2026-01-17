@@ -27,3 +27,7 @@ for _ in range(int(input())):
 
     else:
         print("Yes" if is_blacked[q2] else "No")
+
+# 問題文とは逆向きの有向グラフを作成
+# ある黒色の頂点から他の頂点に行けるかどうかのチェックは逆向きの有向グラフを作れば探索可能
+# 各頂点が黒色に塗られる度にDFSでO(N)

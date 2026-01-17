@@ -13,10 +13,10 @@ a_sum[0]=a[0]
 for i in range(1,n):
     a_sum[i] = a_sum[i-1]+a[i]
 
-# print("a_sum",a_sum)
+print("a_sum",a_sum)
 for i in b:
     left = bisect.bisect_left(a,i)
-    # print("left",left)
+    print("i",i,"left",left)
     if left == 0:
         ans += a_sum[-1] - n*i
     else:
@@ -26,13 +26,9 @@ for i in b:
         ans += (a_sum[-1]-a_sum[left-1]) - i*(n-left)
 
 print(ans%mod)
-# for i in b:
-#     l = 0
-#     r = n
-#     while (r - l) >1:
-#         mid = ((l + r)/2)
-#         if i >= a[mid]:
-#             l = mid
-#         else:
-#             r = mid
-    
+
+
+
+#　AーB >= 0 の時は i*n 
+#  A-B <0 の時はひき算を逆にする
+# Aの総和からB×Aの個数ひき算するだけ
