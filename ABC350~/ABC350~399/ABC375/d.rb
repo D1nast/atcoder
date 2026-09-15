@@ -1,1 +1,0 @@
-s = gets.chomp
