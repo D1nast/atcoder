@@ -1,7 +1,8 @@
 # 1~N1までのグラフの際長距離
 # N1+1~N1+N2までのグラフの際長距離
 # これらの合算+1の数を答える
-
+# 基本的にBFSはキューに入れる瞬間に時刻（距離）を確定させると覚えておけばほぼ間違いない
+# https://atcoder.jp/contests/abc309/tasks/abc309_d
 
 
 from collections import deque
