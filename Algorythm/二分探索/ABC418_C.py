@@ -1,7 +1,8 @@
 
 # bisect_left: x以上の値がある最初のインデックス
+## 値が存在しない場合は要素数+1のインデックスが返る
 # bisect_right: xより大きい値がある最初のインデックス
-
+## 値が存在しない場合は要素数+1のインデックスが返る
 import bisect
 
 n,q = list(map(int,input().split()))
