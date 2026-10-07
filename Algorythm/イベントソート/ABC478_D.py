@@ -1,3 +1,10 @@
+# https://atcoder.jp/contests/abc478/tasks/abc478_d
+
+# 辞書でデータを管理
+# LiでXiを追加
+# Ri+1でXiを削除
+# Li~Riを時刻の幅として捉える
+
 n,q = list(map(int,input().split()))
 dict = {}
 add_time = [ [] for _ in range(n) ]
@@ -22,6 +29,3 @@ for i in range(n):
     ans.append(len(dict))
 
 print(" ".join(map(str,ans)))
-# print(add_time,del_time)
-# dict.setdefault(a[right],0)
-# 時系列順にする
