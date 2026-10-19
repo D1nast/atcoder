@@ -1,29 +1,30 @@
-n = int(input())
-parts = []
-ans = 0
-head = []
-head.append([0,0,0])
-w_sum=0
-for _ in range(n):
-    get = list(map(int,input().split()))
-    parts.append(get)
-    ans += get[2]
+import copy
+
+def recursion(n,i,m,array,depth):
+    depth += 1
+    if len(array) == n:
+        ans.append(array)
+        return
+    
+    for j in range(i+10,m+1):
+        if j+(n-depth)*10 > m:
+            return
+        next_arr = copy.deepcopy(array)
+        if j <= m:
+            next_arr.append(j)
+            recursion(n,j,m,next_arr,depth)
+
+n,m = list(map(int,input().split()))
+ans = []
+
+for i in range(1,11):
+    recursion(n,i,m,[i],1)
 
 
-for i in range(n):
-    if parts[i][1] > parts[i][2]:
-        head.append(parts[i])
-    w_sum += parts[i][0]
+ans.sort()
+print(len(ans))
+for i in ans:
+    print(" ".join(map(str,i)))
 
-w_sum //= 2
-dp = [[0]*(w_sum+1) for _ in range(len(head))]
-for i in range(1,len(head)):
-    for j in range(1,w_sum+1):
-        if j >= head[i][0]:
-            dp[i][j] = max(head[i][1]-head[i][2] + dp[i-1][j-head[i][0]],dp[i-1][j])
-        else:
-            dp[i][j] = dp[i-1][j]
-
-
-# print(dp,"head",head)
-print(ans+dp[-1][-1])
+# 1 11 21 31 41 51 61 71 81 91 101 111
+# 1 19 29 39 49 59 69 79 89 99 109 119
