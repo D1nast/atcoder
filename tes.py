@@ -1,30 +1,40 @@
-import copy
+import math
+from itertools import permutations
 
-def recursion(n,i,m,array,depth):
-    depth += 1
-    if len(array) == n:
-        ans.append(array)
-        return
-    
-    for j in range(i+10,m+1):
-        if j+(n-depth)*10 > m:
-            return
-        next_arr = copy.deepcopy(array)
-        if j <= m:
-            next_arr.append(j)
-            recursion(n,j,m,next_arr,depth)
-
-n,m = list(map(int,input().split()))
-ans = []
-
-for i in range(1,11):
-    recursion(n,i,m,[i],1)
+n,s,t = list(map(int,input().split()))
+grid = []
+ans = float("INF")
+for _ in range(n):
+    grid.append(list(map(int,input().split())))
 
 
-ans.sort()
-print(len(ans))
-for i in ans:
-    print(" ".join(map(str,i)))
+for perm in permutations(grid, n):
+    for i in range(2**n):
+        tmp = 0
+        now = [0,0]
+        for j in range(n):
+            if (i>>j)&1:
+                # 前の地点からAiBiに移動
+                x = now[0]-perm[j][0]
+                y = now[1]-perm[j][1]
+                tmp += math.sqrt(x**2 + y**2)/s
+                # AiBiからCiDiにレーザー照射
+                x = perm[j][0]-perm[j][2]
+                y = perm[j][1]-perm[j][3]
+                tmp += math.sqrt(x**2 + y**2)/t
+                now[0],now[1] = perm[j][2],perm[j][3]
+            else:
+                # 前の地点からCiDiに移動
+                x = now[0]-perm[j][2]
+                y = now[1]-perm[j][3]
+                tmp += math.sqrt(x**2 + y**2)/s
+                # CiDiからAiBiにレーザー照射
+                x = perm[j][2]-perm[j][0]
+                y = perm[j][3]-perm[j][1]
+                tmp += math.sqrt(x**2 + y**2)/t
+                now[0],now[1] = perm[j][0],perm[j][1]
+        ans = min(ans,tmp)
 
-# 1 11 21 31 41 51 61 71 81 91 101 111
-# 1 19 29 39 49 59 69 79 89 99 109 119
+print(ans)
+
+
