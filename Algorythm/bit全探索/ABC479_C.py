@@ -1,6 +1,7 @@
 # https://atcoder.jp/contests/abc479/tasks/abc479_c
 # https://www.youtube.com/watch?v=umfbbrElhaM
 # 2^20のbit演算。典型的な問題
+# youtube解説がわかりやすい
 
 n,w = list(map(int,input().split()))
 bento=[]
