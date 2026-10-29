@@ -1,34 +1,20 @@
+from itertools import groupby
 
-
-n = int(input())
-
-for _ in range(n):
+for i in range(int(input())):
+    n = int(input())
     s = input()
-    str_dict = {}
-    arranged = []
-    tmp = []
-    for i in range(len(s)):
-        str_dict.setdefault(s[i],0)
-        str_dict[s[i]] += 1
-    for i in sorted(str_dict.items(),key = lambda x:x[1],reverse=True):
-        arranged.append(list(i))
+    # 0と1の連続回数の最大値
+    max_c = [0,0]
+    # 0と1の出現回数
+    length_c = [0,0]
 
-    if arranged[0][1] > len(s)-arranged[0][1]+1:
-        print("No")
-        continue
+    for c,g in groupby(s):
+        length = len(list(g))
+        max_c[int(c)] = max(max_c[int(c)],length)
+        length_c[int(c)] += length
 
-    for i in range(len(arranged)):
-        for j in range(arranged[i][1]):
-            tmp.append(arranged[i][0])
-
-    out = "".join(tmp)
-    front = (len(s)+1)//2
-    ans = [""]*len(s)
-    ans[0::2] = out[:front]
-    ans[1::2] = out[front:]
-    
-    print("Yes")
-    print("".join(ans))
-
-
-    
+    ans = min( 
+        (length_c[0] - max_c[0])*2 + length_c[1],
+        (length_c[1] - max_c[1])*2 + length_c[0]
+     )
+    print(ans)  
