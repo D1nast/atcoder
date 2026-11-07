@@ -23,8 +23,7 @@ for i in range(n):
 
 ans = []
 
-# 各候補者が、辞退した時の差分を求める
-# ciとして管理する
+# 各候補者が、辞退した時の候補者の得票数を求める
 for i in range(n):
     ci = (n,-1)
     change = change_vote[i]
@@ -34,6 +33,7 @@ for i in range(n):
 
     # 候補者の増減を見て、最新とどうかを確認する
     for j in range(len(change)+2):
+        # 候補者ナンバーと、元々上位１、２位の得票数を確認
         if j < len(change):
             x = change[j]
         elif j == len(change):
@@ -41,14 +41,17 @@ for i in range(n):
         else:
             x = c2[0]
 
+        # 得票数が大きいなら更新
         if default_can[x] > ci[1]:
             ci = (x,default_can[x])
+        # 得票数が同じなら、番号が若い方
         elif ci[1] == default_can[x] and ci[0] > x:
              ci = (x, default_can[x])
 
     ans.append(ci[0]+1)
-    default_can[i] += len(change)
 
+    # 足したのを元に戻す
+    default_can[i] += len(change)
     for j in change:
         default_can[j]-=1
 
