@@ -1,47 +1,57 @@
 import bisect
 
-h,w,n,q = list(map(int,input().split()))
-tmp_r = []
-tmp_c = []
+n,q = list(map(int,input().split()))
+a = list(map(int,input().split()))
+
+# ブロックの累積和
+b_sum = []
+b_ind = []
+# ブロック内の累積和
+b_in_sum = []
+counter = a[0]
+memo = 1
 for i in range(n):
-    r,c = list(map(int,input().split()))
-    tmp_r.append(r)
-    tmp_c.append(c)
+    if i == 0:
+        b_sum.append(a[i])
+        b_ind.append(a[i])
+        b_in_sum.append([a[i]])
+    else:
+        b_sum.append(b_sum[-1]+ counter + a[i])
+        b_ind.append(memo+1)
+        counter += a[i]
 
-tmp_r.sort()
-tmp_c.sort()
-
-row = {}
-column = {}
-
-for i in tmp_r:
-    row.setdefault(i,0)
-    row[i] += 1
-
-for j in tmp_c:
-    column.setdefault(j,0)
-    column[j] += 1
-
-row_key = [0]
-row_val = [0]
-column_key = [0]
-column_val = [0]
-
-for k,v in row.items():
-    row_key.append(k)
-    row_val.append(row_val[-1]+v)
-
-for k,v in column.items():
-    column_key.append(k)
-    column_val.append(column_val[-1]+v)
+        b_in_sum.append(b_in_sum[-1]+[a[i]])
+        b_in_sum[-1][-1] = b_in_sum[-1][-1]+b_in_sum[-1][-2]
+        memo += len(b_in_sum[-1])
 
 for i in range(q):
-    query = list(map(int,input().split()))
-    if query[0] == 1:
-        left = bisect.bisect_left(row_key,query[1])
-        right = bisect.bisect_right(row_key,query[2])-1
-        print(row_val[right]-row_val[left-1])
+    l,r = list(map(int,input().split()))
+    r_pos = bisect.bisect_right(b_ind,r)-1
+    l_pos = bisect.bisect_right(b_ind,l)-1
+    # ブロックの累積和のうち、取る範囲を取得
+    if l_pos==0:
+        sum = b_sum[r_pos-1]
     else:
-        left = bisect.bisect_left(column_key,query[1])
-        right = bisect.bisect_right(column_key,query[2])-1
-        print(column_val[right]-column_val[left-1])
+        sum = b_sum[r_pos-1] - b_sum[l_pos-1]
+
+    # 右端ブロックのうち、R以内の値を足す
+    sum += b_in_sum[r_pos][r-b_ind[r_pos]]
+    # 左端ブロックから、範囲外を差し引く
+    sum -= b_in_sum[l_pos][-1] - b_in_sum[l_pos][l-b_ind[l_pos]]
+    print(sum)
+
+print("b_sum",b_sum,"b_ind",b_ind,"b_in_sum",b_in_sum)
+
+# 2つを求めて、累積和を求める
+# ブロックの累積和
+# ブロック内の累積和
+
+# Rからブロックの位置を求め、ブロック内のうち、Rのポジションを測る
+# Lからブロックの位置を求め、ブロック内のうち、Lのポジションを測る
+# RからLを差し引く累積和問題
+
+# それぞれの累積和は、{ブロックの最初の数字:累積和の値}
+# ブロック内の累積和はL(orR)i - ブロックの累積和のキーで求められる
+
+# 答えは以下で求まる
+# ブロックの累積和 - 両端のブロック内の累積和
