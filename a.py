@@ -1,45 +1,47 @@
-# https://atcoder.jp/contests/abc477/tasks/abc477_d
-# 区間の問題
-# 各マスで、タイルが置かれていなかった区間に発生した、最も最後のクエリ2を求める事が解法となる
+import heapq
 
-import bisect
-n,q = list(map(int,input().split()))
+def dijkstra(space, start, end):
+    # 未訪問ノードの距離を無限
+    distances = {node: float('infinity') for node in space}
+    distances[start] = 0
+    queue = [(0, start)]
+    
+    while queue:
 
-q2_i = [0]
-q2_c = ["a"]
-q1 = [ [0]for _ in range(n+1) ]
-ans = []
-for i in range(q):
-    d1,d2 = input().split()
-    if d1 == "1":
-        d2 = int(d2)
-        q1[d2].append(i+1)
-    else:
-        q2_i.append(i+1)
-        q2_c.append(d2)
+        current_distance, current_node = heapq.heappop(queue)
+        
+        if current_node == end:
+            return distances[end]
 
-for i in range(1,n+1):
-    ans_tmp = q2_c[0]
-    # 各マスでタイルのなかった区間に発生したクエリ2を確認する
-    for j in range(0,len(q1[i]),2):
-        l = q1[i][j]
-        r = q+1 if j==len(q1[i])-1 else q1[i][j+1]-1
-        b_search = bisect.bisect_right(q2_i,r)-1
+        if distances[current_node] < current_distance:
+            continue
 
-        # タイルが置かれていなかった区間で、最も最後のクエリ2を求める
-        if q2_i[b_search] >=l:
-            ans_tmp = q2_c[b_search]
+        for neighbors in space[current_node]:
+            next_node,weight = neighbors[0],neighbors[1]
+            distance = current_distance + weight
+            # print("disctance",distance,"distances",distances)
+            if distance < distances[next_node]:
+                distances[next_node] = distance
+                heapq.heappush(queue,(distance,next_node))
+        
+                
+    return -1
 
-    ans.append(ans_tmp)
+# 現在のノード
 
-print("".join(ans))
+n,m,s,t = list(map(int,input().split()))
+space = {i:[] for i in range(1,n+1) }
 
-# print("q2_i",q2_i,"q2_c",q2_c,"q1",q1)
+for _ in range(m):
+    load = list(map(int,input().split()))
+    space.setdefault(load[0],[])
+    space[load[0]].append([load[1],-1])
 
+for k,v in space.items(): 
+    v.sort()
+    for i in range(len(v)):
+        v[i][1]=0 if i == 0 else 1 
 
-# 2刻みで確認、それが最後のマスだったら、N+1の値で二分探索
-# タイルの置かれていない区間の右端の値以下のクエリ２のインデックスを確認して、
-# そのインデックスが区間の左端の値未満であれば、そこの区間にクエリ２は存在していないことになる
-# 例：
-## クエリ２：[1,2]
-## 区間：[l=3, r=5]
+# print(space)
+print(dijkstra(space, s, t))
+
