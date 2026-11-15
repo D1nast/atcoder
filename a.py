@@ -1,47 +1,31 @@
-import heapq
+n,k,m = list(map(int,input().split()))
+jwel = []
+master_j = {}
+get_j = set()
+ans = 0
 
-def dijkstra(space, start, end):
-    # 未訪問ノードの距離を無限
-    distances = {node: float('infinity') for node in space}
-    distances[start] = 0
-    queue = [(0, start)]
-    
-    while queue:
+for i in range(n):
+    get = list(map(int,input().split()))
+    jwel.append([get[0],get[1],i])
+    master_j.setdefault(get[0],[get[1],i])
+    if master_j[get[0]][0] < get[1]: master_j[get[0]] = [get[1],i]
 
-        current_distance, current_node = heapq.heappop(queue)
-        
-        if current_node == end:
-            return distances[end]
+sorted_jwel = sorted(jwel,key=lambda x:-x[1])
+sorted_mj = sorted(master_j.items(),key= lambda v:-v[1][0])
 
-        if distances[current_node] < current_distance:
-            continue
+# M種類の宝石を取る
+for i in range(m):
+    ans += sorted_mj[i][1][0]
+    get_j.add(sorted_mj[i][1][1])
 
-        for neighbors in space[current_node]:
-            next_node,weight = neighbors[0],neighbors[1]
-            distance = current_distance + weight
-            # print("disctance",distance,"distances",distances)
-            if distance < distances[next_node]:
-                distances[next_node] = distance
-                heapq.heappush(queue,(distance,next_node))
-        
-                
-    return -1
 
-# 現在のノード
+# 残りの宝石を取る
+count = 0
+for i in range(n):
+    if count == k-m:
+        break
+    if not sorted_jwel[i][2] in get_j:
+        ans += sorted_jwel[i][1]
+        count += 1
 
-n,m,s,t = list(map(int,input().split()))
-space = {i:[] for i in range(1,n+1) }
-
-for _ in range(m):
-    load = list(map(int,input().split()))
-    space.setdefault(load[0],[])
-    space[load[0]].append([load[1],-1])
-
-for k,v in space.items(): 
-    v.sort()
-    for i in range(len(v)):
-        v[i][1]=0 if i == 0 else 1 
-
-# print(space)
-print(dijkstra(space, s, t))
-
+print(ans)
