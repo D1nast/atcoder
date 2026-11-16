@@ -1,31 +1,35 @@
-n,k,m = list(map(int,input().split()))
-jwel = []
-master_j = {}
-get_j = set()
+# https://atcoder.jp/contests/abc466/tasks/abc466_c
+# Rを右端まで試す
+# 途中でNoが出た場合は、左端を詰めて、再度Rを右へ広げる
+
+n = int(input())
+point = [0]*(n+1)
+l = 1
+r = 2
 ans = 0
+while l < n:
+    # 重なっていたらスキップ
+    if l==r:
+        r +=1
+        continue
 
-for i in range(n):
-    get = list(map(int,input().split()))
-    jwel.append([get[0],get[1],i])
-    master_j.setdefault(get[0],[get[1],i])
-    if master_j[get[0]][0] < get[1]: master_j[get[0]] = [get[1],i]
+    # クエリを出力
+    print("?",l,r)
 
-sorted_jwel = sorted(jwel,key=lambda x:-x[1])
-sorted_mj = sorted(master_j.items(),key= lambda v:-v[1][0])
+    if input() == "Yes":
+        # 右を広げられるなら広げる
+        if r != n:
+            r += 1
+        # 右端に到達しているなら左を縮める
+        else:
+            point[l] = r-l
+            l += 1
+    else:
+        # 左を縮める
+        point[l] = r-1-l
+        l += 1
 
-# M種類の宝石を取る
-for i in range(m):
-    ans += sorted_mj[i][1][0]
-    get_j.add(sorted_mj[i][1][1])
+for i in range(1,n+1):ans += point[i]
 
-
-# 残りの宝石を取る
-count = 0
-for i in range(n):
-    if count == k-m:
-        break
-    if not sorted_jwel[i][2] in get_j:
-        ans += sorted_jwel[i][1]
-        count += 1
-
-print(ans)
+print("!",ans)
+exit()
