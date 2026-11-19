@@ -1,39 +1,77 @@
-# 優先度付きキューとキューの合わせ技
-# イベントは優先度付きキューで、待ちは配列で管理
+# https://atcoder.jp/contests/abc455/tasks/abc455_d
+# 片方向リストの問題
 
-from collections import deque
-import heapq
+from collections import defaultdict
 
-n,k = list(map(int,input().split()))
-restraunt = 0
-event = []
-wait = deque()
-ans =[]
-for i in range(n): event.append(list(map(int,input().split()))+["A"])
-heapq.heapify(event)
-# print(event)
+n,q = list(map(int,input().split()))
+cards = defaultdict(int)
+value_cards = defaultdict(int)
+ans = []
 
-while event:
-    # 事が発生する時間、滞在時間、人数、パターン
-    i,o,p,pattern = heapq.heappop(event)
-    if pattern == "A":
-        if not wait and restraunt+p <= k:
-            restraunt += p
-            heapq.heappush(event,[o+i,o,p,"B"])
-            ans.append(i)
-        else:
-            wait.append([i,o,p,pattern])
+for i in range(n): cards[i+1] = 0
+for i in range(q):
+    c,q = list(map(int,input().split()))
+
+    # 外す
+    if c in value_cards:
+        cards[value_cards[c]] = 0
+        del value_cards[c]
+
+    # 付け替える
+    ## カードqは、カードcを上に載せている
+    cards[q] = c
+    ## カードcは、カードqの上に載っている
+    value_cards[c] = q
+
+
+for i in range(n):
+    # どこかのカードの上に載っているなら、カードiが最初乗っていた山は0になる
+    if i+1 in value_cards:
+        ans.append(0)
     else:
-        restraunt -= p
-        while len(wait) > 0:
-            if wait[0][2]+ restraunt <= k:
-                restraunt += wait[0][2]
-                heapq.heappush(event,[i+wait[0][1],wait[0][1],wait[0][2],"B"])
-                ans.append(i)
-                wait.popleft()
+        # キーがゼロになるまで続ける
+        tmp = 0
+        check = True
+        call = i+1
+        while check:
+            if cards[call]!=0:
+                call = cards[call]
             else:
-                break
+                check = False
+            tmp += 1
+        ans.append(tmp)
 
-# 小技だが、for文でprintすると１ケースTLEになったため
-print("\n".join(map(str,ans)))
- 
+
+print(" ".join(map(str,ans)))
+# 各山の、最大のカード数を求める
+
+
+
+# cards = どのカードを上に載せているかを示す
+# value_cards = どのカードの上にいるか示す
+# cをqの上に載せる
+
+# print("c",cards,"v",value_cards)
+
+
+
+
+# # 外す、付け替えるをセットにする
+# print(cards)
+
+# 片方向リストのデータ構造
+# { カードi: 一つ上に載っているカードの番号 }
+
+# カードiを参照しているものがなければ、カードiの山は上に積まれているカードの数になる
+# カードiを参照しているものがあれば、カードiの山は０になる
+
+# 各クエリの操作
+# cards[Pi] = Ciにする
+# Ciを値として設定しているキーを持つカードの値を0にする
+
+# 最終の処理
+# 値が0（=上にカードが乗っかっていない）のカードから、幾つ繋がっているのか確認する
+
+# 必要なデータ構造
+# 上に乗っかっているカードを示す辞書
+# ↑のキーと値を反転させた辞書（Ciを値として設定しているキーを持つカードの値を0にする　←に使う）
