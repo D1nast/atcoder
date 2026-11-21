@@ -1,77 +1,69 @@
-# https://atcoder.jp/contests/abc455/tasks/abc455_d
-# 片方向リストの問題
-
-from collections import defaultdict
-
-n,q = list(map(int,input().split()))
-cards = defaultdict(int)
-value_cards = defaultdict(int)
-ans = []
-
-for i in range(n): cards[i+1] = 0
-for i in range(q):
-    c,q = list(map(int,input().split()))
-
-    # 外す
-    if c in value_cards:
-        cards[value_cards[c]] = 0
-        del value_cards[c]
-
-    # 付け替える
-    ## カードqは、カードcを上に載せている
-    cards[q] = c
-    ## カードcは、カードqの上に載っている
-    value_cards[c] = q
-
+n = int(input())
+s = input()
+sector = [ [] for _ in range(3)]
+set = [set(),set(),set()]
+p = 0
 
 for i in range(n):
-    # どこかのカードの上に載っているなら、カードiが最初乗っていた山は0になる
-    if i+1 in value_cards:
-        ans.append(0)
+    set[p].add(s[i])
+    sector[p].append(s[i])
+    if len(set[p])==3 and p < 2:
+        p +=1
+
+if len(set[2]) < 3:
+    print(0)
+    exit()
+
+count = [ {"A":0,"B":0,"C":0} for _ in range(3)]
+ans = 1
+
+for i in range(3):
+    for c in sector[i]:
+        count[i][c] += 1
+
+can_left = 0
+while count[1]["A"] >= 1 and count[1]["B"] >= 1 and count[1]["C"] >= 1:
+    del_c = sector[1][can_left]
+    if count[1][del_c] >= 2:
+        count[1][del_c] -=1
+        can_left +=1
     else:
-        # キーがゼロになるまで続ける
-        tmp = 0
-        check = True
-        call = i+1
-        while check:
-            if cards[call]!=0:
-                call = cards[call]
-            else:
-                check = False
-            tmp += 1
-        ans.append(tmp)
+        break
+
+ans += can_left
+        
+for i in range(len(sector[2])):
+    # 右端から移動させる文字
+    plus = sector[2][i]
+
+    # 右端を移動させることで条件を満たさなくなったら終了
+    if count[2][plus] == 1:
+        break
+    count[2][plus] -= 1
+    
+    # 右端を中間に足す
+    sector[1].append(plus)
+    count[1][plus]+=1
+
+    # 右端を中間に移動させたことによって、中間を左端に寄せることができるようになるなら、ズラす
+    # これを消せなくなるまでいく
+
+    # 継続する
+    while count[1]["A"] >=1 and count[1]["B"] >=1 and count[1]["C"]>=1:
+        del_c = sector[1][can_left]
+        if count[1][del_c] >= 2:
+            count[1][del_c] -=1
+            can_left += 1
+        else:
+            break
+    ans += 1+can_left
 
 
-print(" ".join(map(str,ans)))
-# 各山の、最大のカード数を求める
+print(ans)
+# print(sector,set,count)
 
 
+# 一番右端を中間に移す
+# 移したら、中間をどこまで右に寄せられるか確認する
 
-# cards = どのカードを上に載せているかを示す
-# value_cards = どのカードの上にいるか示す
-# cをqの上に載せる
-
-# print("c",cards,"v",value_cards)
-
-
-
-
-# # 外す、付け替えるをセットにする
-# print(cards)
-
-# 片方向リストのデータ構造
-# { カードi: 一つ上に載っているカードの番号 }
-
-# カードiを参照しているものがなければ、カードiの山は上に積まれているカードの数になる
-# カードiを参照しているものがあれば、カードiの山は０になる
-
-# 各クエリの操作
-# cards[Pi] = Ciにする
-# Ciを値として設定しているキーを持つカードの値を0にする
-
-# 最終の処理
-# 値が0（=上にカードが乗っかっていない）のカードから、幾つ繋がっているのか確認する
-
-# 必要なデータ構造
-# 上に乗っかっているカードを示す辞書
-# ↑のキーと値を反転させた辞書（Ciを値として設定しているキーを持つカードの値を0にする　←に使う）
+# 移した数+1と、さらに左端に移せる数の掛け算
