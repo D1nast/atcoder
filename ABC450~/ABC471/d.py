@@ -1,21 +1,26 @@
+# https://atcoder.jp/contests/abc471/tasks/abc471_d
+# 最初にクエリ1が来るタイミングを基準として、優先度付きキューで実装する
+# 時刻を揃えることで、クエリ2が到来するたびに、線形で変更を反映させずに済む
+
 import heapq
-heapq.heapify([])
 q,v = list(map(int,input().split()))
-query2 = []
+battery = []
+heapq.heapify(battery)
+base = []
 for i in range(q):
     query = list(map(int,input().split()))
-    if query[0] == 1:
-        heapq.heappush([query[1],query[2]])
+    type = query[0]
+    content = query[1:]
+
+    if type ==1 and not base:
+        base.append(query[1])
+
+    if type ==1:
+        heapq.heappush(battery,-(content[1]-content[0]+base[0]))
     else:
-        query2.append(query[1])
-print(heapq)
+        if not battery:
+            print(-1)
+        else:
+            out = heapq.heappop(battery)
+            print(min(-(out-content[0]+base[0]),v ))
 
-
-# バッテリー残量が大きい値を出力、出力したバッテリーは除去
-# クエリ2のti[1] - ti[1] + ti[2]
-
-# ある時点において、最も数の多い要素を管理する優先度付きキューのようなもので管理
-
-# 最も
-
-# ある時点で

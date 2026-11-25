@@ -1,35 +1,31 @@
-# https://atcoder.jp/contests/abc466/tasks/abc466_c
-# Rを右端まで試す
-# 途中でNoが出た場合は、左端を詰めて、再度Rを右へ広げる
+n,q = list(map(int,input().split()))
+query = []
+pointer = -1
+tracking = -1
+server = [""]
 
-n = int(input())
-point = [0]*(n+1)
-l = 1
-r = 2
-ans = 0
-while l < n:
-    # 重なっていたらスキップ
-    if l==r:
-        r +=1
-        continue
+for i in range(q):
+    get = list(map(str,input().split()))
+    if get[0] == "3":
+        pointer = i
+        tracking = get[1]
+    query.append(get)
 
-    # クエリを出力
-    print("?",l,r)
-
-    if input() == "Yes":
-        # 右を広げられるなら広げる
-        if r != n:
-            r += 1
-        # 右端に到達しているなら左を縮める
-        else:
-            point[l] = r-l
-            l += 1
+for i in reversed(range(pointer)):
+    if query[i][0] == "1":
+        if query[i][1] == tracking:
+            tracking = "-1"
+    elif query[i][0] == "2":
+        if tracking == query[i][1]:
+            server.append(query[i][2][::-1])
     else:
-        # 左を縮める
-        point[l] = r-1-l
-        l += 1
+        if tracking == "-1":
+            tracking = query[i][1]
 
-for i in range(1,n+1):ans += point[i]
+# クエリ１が来た場合は、次の３を探す
+# クエリ2の場合は、追跡中のサーバーなら確認
+# クエリ３が来たら、追跡中のサーバーを変更する
+print("".join(server)[::-1])
 
-print("!",ans)
-exit()
+# 追跡先が変わるのは、
+# 追跡中でないクエリ１が来ても、変わらない
